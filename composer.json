@@ -1,0 +1,46 @@
+{
+  "name": "thiagowip/simple-database-manager",
+  "description": "Uma biblioteca PHP simples e elegante para gerenciar conexões de banco de dados com paginação automática",
+  "type": "library",
+  "keywords": [
+    "php",
+    "database",
+    "pagination",
+    "pdo",
+    "mysql",
+    "orm"
+  ],
+  "homepage": "https://github.com/thiagowip/simple-database-manager",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thiago Fernandes",
+      "email": "thiagowip@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-pdo": "*",
+    "vlucas/phpdotenv": "^5.6"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ThiagoWip\\SimpleDatabaseManager\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ThiagoWip\\SimpleDatabaseManager\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "test-coverage": "phpunit --coverage-html coverage"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
