@@ -47,7 +47,7 @@ class Paginator
     foreach ($this->result->links as $link) {
       $isActive = ($link == $this->result->currentPage);
       $style = $isActive
-        ? "padding: 8px 12px; margin: 2px; background-color: #007cba; color: white; text-decoration: none; border-radius: 4px;"
+        ? "padding: 8px 12px; margin: 2px; background-color: #007cba; color: #fff; text-decoration: none; border-radius: 4px;"
         : "padding: 8px 12px; margin: 2px; background-color: #f1f1f1; color: #333; text-decoration: none; border-radius: 4px;";
 
       $url = htmlspecialchars($_SERVER['PHP_SELF']) . "?page=$link";
