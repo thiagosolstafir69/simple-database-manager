@@ -22,3 +22,11 @@ if (isset($_GET['delete'])) {
 }
 
 echo $paginator->render();
+
+echo "<br><br>";
+echo "<div style='margin: 20px 0; padding: 10px; background: #f5f5f5; border-radius: 5px;'>";
+echo "<strong>Outras opções:</strong><br>";
+echo "<a href='examples/basic_crud.php'>🔧 Exemplos CRUD</a> | ";
+echo "<a href='examples/example_no_pagination.php'>📋 Ver todos sem paginação</a> | ";
+echo "<a href='examples/example_with_filters.php'>🔍 Ver com filtros de busca</a>";
+echo "</div>";

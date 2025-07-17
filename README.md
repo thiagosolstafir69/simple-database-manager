@@ -94,6 +94,36 @@ foreach ($data->data as $user) {
 echo $paginator->render();
 ```
 
+### Listagem Sem Paginação
+
+```php
+// Buscar todos os registros
+$users = $app->getDatabase()->getAll('users');
+
+foreach ($users as $user) {
+    echo $user->name . " - " . $user->email;
+}
+
+// Total de registros
+echo "Total: " . count($users);
+```
+
+### Busca com Filtros
+
+```php
+$db = $app->getDatabase();
+
+// Busca personalizada com prepared statements
+$sql = "SELECT * FROM users WHERE name LIKE :search OR email LIKE :search";
+$stmt = $db->getConnection()->prepare($sql);
+$stmt->execute(['search' => '%João%']);
+$users = $stmt->fetchAll();
+
+foreach ($users as $user) {
+    echo $user->name . " - " . $user->email;
+}
+```
+
 ## 📝 Exemplo Completo
 
 ```php
@@ -127,6 +157,44 @@ echo $paginator->render();
 
 // Informações da paginação
 echo "<p>Total: {$data->total} | Página {$data->currentPage} de {$data->totalPages}</p>";
+```
+
+## 📂 Exemplos Práticos
+
+A biblioteca inclui exemplos completos na pasta `examples/`:
+
+### 🔧 `examples/basic_crud.php`
+Demonstra todas as operações CRUD básicas:
+- Inserir dados
+- Buscar por ID
+- Atualizar registros
+- Contar registros
+- Listar todos
+
+### 📋 `examples/example_no_pagination.php`
+Lista completa de dados sem paginação:
+- Tabela estilizada
+- Contagem total de registros
+- Links de ação (deletar)
+- Confirmação de exclusão
+
+### 🔍 `examples/example_with_filters.php`
+Sistema de busca avançado:
+- Formulário de busca
+- Filtros por nome e email
+- Prepared statements para segurança
+- Preservação de filtros nas ações
+
+### 🚀 Como executar os exemplos:
+
+```bash
+# Servidor local
+php -S localhost:8000
+
+# Acessar exemplos
+http://localhost:8000/examples/basic_crud.php
+http://localhost:8000/examples/example_no_pagination.php
+http://localhost:8000/examples/example_with_filters.php
 ```
 
 ## 🛡️ Segurança

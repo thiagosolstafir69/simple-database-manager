@@ -83,7 +83,8 @@ class DbConnection
     $sql = "SELECT * FROM $table WHERE id = :id";
     $stmt = $this->getConnection()->prepare($sql);
     $stmt->execute(["id" => $id]);
-    return $stmt->fetch(PDO::FETCH_OBJ);
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+    return $result === false ? null : $result;
   }
 
   public function getAll(string $table): array
