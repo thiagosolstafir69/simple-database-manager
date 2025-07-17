@@ -76,5 +76,5 @@ if (!empty($allUsers)) {
 }
 
 echo "<br><a href='../index.php'>← Voltar para paginação</a> | ";
-echo "<a href='example_no_pagination.php'>📋 Ver sem paginação</a> | ";
-echo "<a href='example_with_filters.php'>🔍 Ver com filtros</a>";
+echo "<a href='listagem_completa.php'>📋 Listagem Completa</a> | ";
+echo "<a href='busca_com_filtros.php'>🔍 Busca com Filtros</a>";

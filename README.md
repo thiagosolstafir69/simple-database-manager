@@ -163,7 +163,7 @@ echo "<p>Total: {$data->total} | Página {$data->currentPage} de {$data->totalPa
 
 A biblioteca inclui exemplos completos na pasta `examples/`:
 
-### 🔧 `examples/basic_crud.php`
+### 🔧 `examples/crud_basico.php`
 Demonstra todas as operações CRUD básicas:
 - Inserir dados
 - Buscar por ID
@@ -171,14 +171,14 @@ Demonstra todas as operações CRUD básicas:
 - Contar registros
 - Listar todos
 
-### 📋 `examples/example_no_pagination.php`
+### 📋 `examples/listagem_completa.php`
 Lista completa de dados sem paginação:
 - Tabela estilizada
 - Contagem total de registros
 - Links de ação (deletar)
 - Confirmação de exclusão
 
-### 🔍 `examples/example_with_filters.php`
+### 🔍 `examples/busca_com_filtros.php`
 Sistema de busca avançado:
 - Formulário de busca
 - Filtros por nome e email
@@ -192,9 +192,9 @@ Sistema de busca avançado:
 php -S localhost:8000
 
 # Acessar exemplos
-http://localhost:8000/examples/basic_crud.php
-http://localhost:8000/examples/example_no_pagination.php
-http://localhost:8000/examples/example_with_filters.php
+http://localhost:8000/examples/crud_basico.php
+http://localhost:8000/examples/listagem_completa.php
+http://localhost:8000/examples/busca_com_filtros.php
 ```
 
 ## 🛡️ Segurança
