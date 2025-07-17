@@ -1,6 +1,5 @@
 {
   "name": "thiagowip/simple-database-manager",
-  "version": "1.3.0",
   "description": "Uma biblioteca PHP simples e elegante para gerenciar conexões de banco de dados com paginação automática e suite completa de testes",
   "type": "library",
   "keywords": [
