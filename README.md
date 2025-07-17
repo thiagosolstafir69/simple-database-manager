@@ -4,26 +4,25 @@
 [![Total Downloads](https://poser.pugx.org/thiagowip/simple-database-manager/downloads)](https://packagist.org/packages/thiagowip/simple-database-manager)
 [![License](https://poser.pugx.org/thiagowip/simple-database-manager/license)](https://packagist.org/packages/thiagowip/simple-database-manager)
 
-Uma biblioteca PHP simples e elegante para gerenciar conexões de banco de dados com paginação automática. Desenvolvida seguindo os princípios SOLID e boas práticas do PHP moderno.
+Uma biblioteca PHP simples e elegante para gerenciar conexões de banco de dados com paginação automática.
 
-## ✨ Características
+## Características
 
-- 🚀 **Inicialização automática** - Uma linha configura tudo
-- 🔒 **Seguro** - Prepared statements e validação de entrada
-- 📄 **Paginação elegante** - Sistema completo de paginação
-- 🎯 **Sintaxe de objeto** - `$data->total` em vez de `$data['total']`
-- 🛡️ **Tipagem forte** - PHP 7.4+ com strict types
-- 🔧 **PSR-4** - Autoloading automático via Composer
+- **Inicialização automática** - Uma linha configura tudo
+- **Seguro** - Prepared statements e validação
+- **Paginação elegante** - Sistema completo de paginação
+- **Sintaxe de objeto** - `$data->total` em vez de `$data['total']`
+- **PHP 7.4+** - Tipagem forte e recursos modernos
 
-## 📦 Instalação
+## Instalação
 
 ```bash
 composer require thiagowip/simple-database-manager
 ```
 
-## ⚙️ Configuração
+## Configuração
 
-Crie um arquivo `.env` na raiz do seu projeto:
+Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 DB_HOST=127.0.0.1
@@ -32,37 +31,33 @@ DB_PASS=
 DB_NAME=your_database
 ```
 
-## 🚀 Uso Básico
+## Uso Básico
 
-### Inicialização (uma linha faz tudo!)
+### Inicialização
 
 ```php
 <?php
-
 require 'vendor/autoload.php';
 
 use ThiagoWip\SimpleDatabaseManager\App;
 
-// 🚀 Carrega .env, conecta banco, inicializa tudo automaticamente!
+// Carrega .env, conecta banco e inicializa tudo automaticamente
 $app = App::boot();
 ```
 
-### Operações CRUD
+### CRUD Simples
 
 ```php
 $db = $app->getDatabase();
 
-// Inserir dados
-$success = $db->insert('users', [
-    'name' => 'João Silva',
-    'email' => 'joao@email.com'
-]);
+// Inserir
+$db->insert('users', ['name' => 'João', 'email' => 'joao@email.com']);
 
-// Buscar um registro
+// Buscar um
 $user = $db->getSingle('users', 1);
-echo $user->name; // Sintaxe de objeto!
+echo $user->name; // Sintaxe de objeto
 
-// Atualizar dados
+// Atualizar
 $db->update('users', ['name' => 'João Santos'], 1);
 
 // Deletar
@@ -72,162 +67,82 @@ $db->delete('users', 1);
 $users = $db->getAll('users');
 ```
 
-### Paginação Automática
+### Paginação
 
 ```php
 // Criar paginador (10 itens por página)
 $paginator = $app->createPaginator('users', 10);
 $data = $paginator->getResult();
 
-// Acessar dados com sintaxe de objeto
-echo "Total: " . $data->total;
-echo "Páginas: " . $data->totalPages;
-echo "Página atual: " . $data->currentPage;
-echo "Tem próxima: " . ($data->hasNext ? 'Sim' : 'Não');
+// Informações da paginação
+echo "Total: {$data->total} | Página {$data->currentPage} de {$data->totalPages}";
 
 // Exibir dados
 foreach ($data->data as $user) {
-    echo $user->name . " - " . $user->email;
+    echo "{$user->name} - {$user->email}<br>";
 }
-
-// Renderizar links de paginação
-echo $paginator->render();
-```
-
-### Listagem Sem Paginação
-
-```php
-// Buscar todos os registros
-$users = $app->getDatabase()->getAll('users');
-
-foreach ($users as $user) {
-    echo $user->name . " - " . $user->email;
-}
-
-// Total de registros
-echo "Total: " . count($users);
-```
-
-### Busca com Filtros
-
-```php
-$db = $app->getDatabase();
-
-// Busca personalizada com prepared statements
-$sql = "SELECT * FROM users WHERE name LIKE :search OR email LIKE :search";
-$stmt = $db->getConnection()->prepare($sql);
-$stmt->execute(['search' => '%João%']);
-$users = $stmt->fetchAll();
-
-foreach ($users as $user) {
-    echo $user->name . " - " . $user->email;
-}
-```
-
-## 📝 Exemplo Completo
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-use ThiagoWip\SimpleDatabaseManager\App;
-
-$app = App::boot();
-
-// Paginação automática
-$paginator = $app->createPaginator('users', 5);
-$data = $paginator->getResult();
-
-echo "<h2>Usuários (Página {$data->currentPage})</h2>";
-
-// Exibir em tabela
-echo "<table>";
-foreach ($data->data as $user) {
-    echo "<tr>";
-    echo "<td>{$user->id}</td>";
-    echo "<td>{$user->name}</td>";
-    echo "<td>{$user->email}</td>";
-    echo "</tr>";
-}
-echo "</table>";
 
 // Links de navegação
 echo $paginator->render();
-
-// Informações da paginação
-echo "<p>Total: {$data->total} | Página {$data->currentPage} de {$data->totalPages}</p>";
 ```
 
-## 📂 Exemplos Práticos
+## Exemplos Práticos
 
 A biblioteca inclui exemplos completos na pasta `examples/`:
 
-### 🔧 `examples/crud_basico.php`
-Demonstra todas as operações CRUD básicas:
-- Inserir dados
-- Buscar por ID
-- Atualizar registros
-- Contar registros
-- Listar todos
+| Arquivo | Descrição |
+|---------|-----------|
+| `crud_basico.php` | Operações básicas de CRUD |
+| `listagem_completa.php` | Lista todos os dados sem paginação |
+| `busca_com_filtros.php` | Sistema de busca com filtros |
+| `busca_melhorada.php` | Busca avançada com score de relevância |
 
-### 📋 `examples/listagem_completa.php`
-Lista completa de dados sem paginação:
-- Tabela estilizada
-- Contagem total de registros
-- Links de ação (deletar)
-- Confirmação de exclusão
-
-### 🔍 `examples/busca_com_filtros.php`
-Sistema de busca avançado:
-- Formulário de busca
-- Filtros por nome e email
-- Prepared statements para segurança
-- Preservação de filtros nas ações
-
-### 🚀 Como executar os exemplos:
+### Como executar os exemplos
 
 ```bash
-# Servidor local
+# Iniciar servidor local
 php -S localhost:8000
 
 # Acessar exemplos
 http://localhost:8000/examples/crud_basico.php
-http://localhost:8000/examples/listagem_completa.php
-http://localhost:8000/examples/busca_com_filtros.php
 ```
 
-## 🛡️ Segurança
+## Busca Personalizada
+
+```php
+$db = $app->getDatabase();
+
+// Busca com prepared statements
+$sql = "SELECT * FROM users WHERE name LIKE :search";
+$stmt = $db->getConnection()->prepare($sql);
+$stmt->execute(['search' => '%João%']);
+$users = $stmt->fetchAll();
+```
+
+## Segurança
 
 - **Prepared Statements** - Proteção contra SQL Injection
-- **Validação de entrada** - Nomes de tabelas e campos são validados
-- **Tipagem forte** - Previne erros em tempo de execução
-- **Sanitização** - Dados são tratados antes da exibição
+- **Validação de entrada** - Nomes de tabelas validados
+- **Tipagem forte** - Previne erros em runtime
 
-## 🔧 Requisitos
+## Requisitos
 
 - PHP >= 7.4
 - PDO extension
 - MySQL/MariaDB
 
-## 📄 Licença
+## Licença
 
-MIT License. Veja [LICENSE](LICENSE) para mais detalhes.
+MIT License. Veja [LICENSE](LICENSE) para detalhes.
 
-## 🤝 Contribuição
-
-Contribuições são bem-vindas! Por favor:
+## Contribuição
 
 1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
+2. Crie uma branch (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
 5. Abra um Pull Request
 
-## 🐛 Reportar Bugs
+---
 
-Encontrou um bug? [Abra uma issue](https://github.com/thiagowip/simple-database-manager/issues)
-
-## ⭐ Dê uma Estrela!
-
-Se este projeto te ajudou, dê uma ⭐ no GitHub! 
+⭐ **Gostou do projeto? Dê uma estrela no GitHub!** 

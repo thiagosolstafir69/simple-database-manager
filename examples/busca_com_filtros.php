@@ -21,17 +21,27 @@ $users = [];
 if (isset($_GET['search']) && !empty($_GET['search'])) {
   $search = $_GET['search'];
 
-  // Usando prepared statements para busca segura
-  $sql = "SELECT * FROM users WHERE name LIKE :search OR email LIKE :search ORDER BY created_at DESC";
-  $stmt = $db->getConnection()->prepare($sql);
-  $stmt->execute(['search' => '%' . $search . '%']);
-  $users = $stmt->fetchAll();
+  // Opção 1: Usar getAll() e filtrar no PHP
+  $allUsers = $db->getAll('users');
+  $users = array_filter($allUsers, function ($user) use ($search) {
+    return stripos($user->name, $search) !== false ||
+      stripos($user->email, $search) !== false;
+  });
 
-  echo "<p><em>Resultados para: \"" . htmlspecialchars($search) . "\"</em></p>";
+  // Ordenar por data de criação (mais recente primeiro)
+  usort($users, function ($a, $b) {
+    return strtotime($b->created_at) - strtotime($a->created_at);
+  });
+
+  echo "<p><em>Resultados para: \"" . htmlspecialchars($search) . "\" (filtrado via PHP)</em></p>";
 } else {
-  // Buscar todos ordenados por data de criação
-  $sql = "SELECT * FROM users ORDER BY created_at DESC";
-  $users = $db->getConnection()->query($sql)->fetchAll();
+  // Buscar todos usando getAll()
+  $users = $db->getAll('users');
+
+  // Ordenar por data de criação
+  usort($users, function ($a, $b) {
+    return strtotime($b->created_at) - strtotime($a->created_at);
+  });
 }
 
 if (!empty($users)) {

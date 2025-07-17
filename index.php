@@ -28,5 +28,6 @@ echo "<div style='margin: 20px 0; padding: 10px; background: #f5f5f5; border-rad
 echo "<strong>Outras opções:</strong><br>";
 echo "<a href='examples/crud_basico.php'>🔧 CRUD Básico</a> | ";
 echo "<a href='examples/listagem_completa.php'>📋 Listagem Completa</a> | ";
-echo "<a href='examples/busca_com_filtros.php'>🔍 Busca com Filtros</a>";
+echo "<a href='examples/busca_com_filtros.php'>🔍 Busca com Filtros</a> | ";
+echo "<a href='examples/busca_melhorada.php'>⚡ Busca Melhorada</a>";
 echo "</div>";
