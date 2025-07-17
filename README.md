@@ -131,6 +131,34 @@ $users = $stmt->fetchAll();
 - PDO extension
 - MySQL/MariaDB
 
+## Testes
+
+A biblioteca inclui uma suite completa de testes:
+
+```bash
+# Executar todos os testes
+composer test
+
+# Apenas testes unitários
+vendor/bin/phpunit tests/Unit/
+
+# Apenas testes de integração
+vendor/bin/phpunit tests/Integration/
+
+# Com cobertura de código
+composer test-coverage
+```
+
+### O que é testado:
+- ✅ **Operações CRUD** - Insert, update, delete, select
+- ✅ **Sintaxe de objeto** - Sempre `$data->propriedade`, nunca arrays
+- ✅ **Segurança** - Prepared statements e validação
+- ✅ **Paginação** - Cálculos e renderização
+- ✅ **Padrão Singleton** - App::boot() funcional
+- ✅ **Workflow completo** - Testes de integração
+
+Veja [tests/README.md](tests/README.md) para documentação completa dos testes.
+
 ## Licença
 
 MIT License. Veja [LICENSE](LICENSE) para detalhes.
