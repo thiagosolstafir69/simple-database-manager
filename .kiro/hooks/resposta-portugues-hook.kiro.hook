@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Resposta em Português",
+  "description": "Hook que monitora mudanças em arquivos PHP e garante que todas as respostas do AI sejam fornecidas em português",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.php",
+      "src/*.php",
+      "examples/*.php",
+      "tests/**/*.php"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Sempre responda em português. Analise as mudanças nos arquivos PHP e forneça feedback, sugestões ou explicações exclusivamente em português brasileiro."
+  }
+}

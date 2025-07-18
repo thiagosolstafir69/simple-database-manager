@@ -1,6 +1,7 @@
 {
   "name": "thiagowip/simple-database-manager",
-  "description": "Uma biblioteca PHP simples e elegante para gerenciar conexões de banco de dados com paginação automática e suite completa de testes",
+  "version": "2.0.0",
+  "description": "Uma biblioteca PHP simples e elegante para gerenciar conexões de banco de dados com paginação automática, CRUD completo e interface moderna",
   "type": "library",
   "keywords": [
     "php",
@@ -8,7 +9,10 @@
     "pagination",
     "pdo",
     "mysql",
-    "orm"
+    "orm",
+    "crud",
+    "ajax",
+    "modern-ui"
   ],
   "homepage": "https://github.com/thiagosolstafir69/simple-database-manager",
   "license": "MIT",

@@ -4,13 +4,15 @@
 [![Total Downloads](https://poser.pugx.org/thiagowip/simple-database-manager/downloads)](https://packagist.org/packages/thiagowip/simple-database-manager)
 [![License](https://poser.pugx.org/thiagowip/simple-database-manager/license)](https://packagist.org/packages/thiagowip/simple-database-manager)
 
-Uma biblioteca PHP simples e elegante para gerenciar conexões de banco de dados com paginação automática.
+Uma biblioteca PHP simples e elegante para gerenciar conexões de banco de dados com paginação automática, CRUD completo e interface moderna.
 
 ## Características
 
 - **Inicialização automática** - Uma linha configura tudo
 - **Seguro** - Prepared statements e validação
 - **Paginação elegante** - Sistema completo de paginação
+- **Interface moderna** - Design responsivo com glassmorphism
+- **AJAX integrado** - Formulários assíncronos com validação
 - **Sintaxe de objeto** - `$data->total` em vez de `$data['total']`
 - **PHP 7.4+** - Tipagem forte e recursos modernos
 
@@ -92,6 +94,7 @@ A biblioteca inclui exemplos completos na pasta `examples/`:
 
 | Arquivo | Descrição |
 |---------|-----------|
+| `formulario_ajax.php` | **🆕** Interface moderna com AJAX, validação em tempo real |
 | `crud_basico.php` | Operações básicas de CRUD |
 | `listagem_completa.php` | Lista todos os dados sem paginação |
 | `busca_com_filtros.php` | Sistema de busca com filtros |
@@ -173,4 +176,4 @@ MIT License. Veja [LICENSE](LICENSE) para detalhes.
 
 ---
 
-⭐ **Gostou do projeto? Dê uma estrela no GitHub!** 
+⭐ **Gostou do projeto? Dê uma estrela no GitHub!**
