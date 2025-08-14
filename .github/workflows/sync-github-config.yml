@@ -1,0 +1,119 @@
+name: Sync .github from central repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      central_repo:
+        description: 'Central repository (owner/repo) that contains the canonical .github'
+        required: false
+      auto_merge:
+        description: 'Enable auto-merge for the created PR? (true/false)'
+        required: false
+        default: 'true'
+  schedule:
+    - cron: '0 3 * * *' # daily at 03:00 UTC (adjust as needed)
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      # Default central repo is read from a repository secret so you don't need to edit the workflow file.
+      # Set the secret 'CENTRAL_CONFIG_REPO' to 'owner/repo' for your canonical config repository.
+      CENTRAL_REPO: ${{ secrets.CENTRAL_CONFIG_REPO }}
+
+    steps:
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+
+      - name: Determine central repository
+        id: central
+        run: |
+          if [ -n "${{ github.event.inputs.central_repo }}" ]; then
+            echo "central_repo=${{ github.event.inputs.central_repo }}" >> $GITHUB_OUTPUT
+          else
+            echo "central_repo=${{ env.CENTRAL_REPO }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout central config repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.central.outputs.central_repo }}
+          path: central-config
+          token: ${{ secrets.SYNC_TOKEN }}
+
+      - name: Show what will be synced
+        run: |
+          echo "Central repo: ${{ steps.central.outputs.central_repo }}"
+          ls -la central-config/.github || true
+
+      - name: Copy .github files into this repo working tree
+        run: |
+          set -e
+          mkdir -p .github
+          rsync -av --delete central-config/.github/ .github/
+          git status --porcelain
+
+      - name: Commit changes (if any)
+        id: commit
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add .github
+            git commit -m "chore: sync .github from ${{ steps.central.outputs.central_repo }}"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Push branch and create Pull Request
+        if: steps.commit.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v4
+        id: cpr
+        with:
+          token: ${{ secrets.SYNC_TOKEN }}
+          commit-message: "chore: sync .github from central repo"
+          branch: "sync/.github-from-central-${{ github.run_id }}"
+          title: "Sync .github from central repository"
+          body: |
+            This PR updates the repository's .github files from the central configuration repo (${{ steps.central.outputs.central_repo }}).
+            If everything looks good, merge to apply the standard rules/workflows.
+          base: ${{ github.ref_name }}
+
+      - name: Enable auto-merge for the PR (best-effort)
+        if: steps.commit.outputs.changed == 'true' && (github.event.inputs.auto_merge != 'false')
+        env:
+          TOKEN: ${{ secrets.SYNC_TOKEN }}
+          OWNER_REPO: ${{ github.repository }}
+          BRANCH: "sync/.github-from-central-${{ github.run_id }}"
+        run: |
+          set -e
+          owner=${OWNER_REPO%/*}
+          repo=${OWNER_REPO#*/}
+          echo "Looking for PR with head $owner:$BRANCH"
+          pr_json=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/repos/$owner/$repo/pulls?head=$owner:$BRANCH&state=open")
+          pr_number=$(echo "$pr_json" | jq -r '.[0].number // empty')
+          if [ -z "$pr_number" ]; then
+            echo "No PR found for branch $BRANCH"
+            exit 0
+          fi
+          echo "Found PR #$pr_number, attempting to enable auto-merge"
+          curl -s -X PUT -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$owner/$repo/pulls/$pr_number/auto-merge" \
+            -d '{"merge_method":"squash"}' || echo "enable auto-merge failed (will require manual merge)"
+
+      - name: Clean up working copy
+        if: always()
+        run: |
+          rm -rf central-config
+
+# Notes:
+# Required secrets in each target repository (Settings → Secrets → Actions):
+# - SYNC_TOKEN: Personal Access Token (PAT) with `repo` permissions used to checkout the central repo and create PRs.
+# - CENTRAL_CONFIG_REPO: the canonical config repository in the form `owner/repo` (e.g. `myorg/github-config`).
+#
+# Behavior:
+# - The workflow reads the central repo from the input `central_repo` (when dispatched) or from the secret
+#   `CENTRAL_CONFIG_REPO`. This lets you configure repositories by setting a secret instead of editing the workflow.
+# - The workflow creates a branch and a PR only if there are changes, then attempts to enable auto-merge for that PR.
+# - If auto-merge can't be enabled (branch protection, token permissions), the PR remains for manual review/merge.
